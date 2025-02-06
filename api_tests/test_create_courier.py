@@ -5,12 +5,14 @@ from helper.helper import Helper
 
 class TestCreateCourier:
     @allure.title("Создание нового курьера")
-    def test_create_courier(self, generate_random_data):
+    def test_create_courier(self, generate_random_data, register_new_courier_and_return_login_password):
+        login, password, first_name = register_new_courier_and_return_login_password
         payload = {
             "login": generate_random_data[0],
             "password": generate_random_data[1],
             "firstName": generate_random_data[2]
         }
+
         with allure.step("Отправляем запрос на создание курьера"):
             response = requests.post('https://qa-scooter.praktikum-services.ru/api/v1/courier', data=payload)
 
@@ -22,12 +24,14 @@ class TestCreateCourier:
             assert response.text == response_text
 
     @allure.title("Нельзя создать двух одинаковых курьеров")
-    def test_cant_create_two_same_couriers(self, generate_random_data):
+    def test_cant_create_two_same_couriers(self, generate_random_data, register_new_courier_and_return_login_password):
+        login, password, first_name = register_new_courier_and_return_login_password
         payload = {
             "login": generate_random_data[0],
             "password": generate_random_data[1],
             "firstName": generate_random_data[2]
         }
+
         with allure.step("Отправляем запрос на создание курьера"):
             requests.post('https://qa-scooter.praktikum-services.ru/api/v1/courier', data=payload)
 
@@ -79,7 +83,8 @@ class TestCreateCourier:
             assert response_data['message'] == response_text
 
     @allure.title("Ошибка при создании с существующим логином")
-    def test_cant_create_with_already_exist_login(self, generate_random_data):
+    def test_cant_create_with_already_exist_login(self, generate_random_data, register_new_courier_and_return_login_password):
+        login, password, first_name = register_new_courier_and_return_login_password
         with allure.step("Подготовка данных"):
             helper = Helper()
             password_2 = helper.generate_random_string(10)
