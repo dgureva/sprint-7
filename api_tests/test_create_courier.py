@@ -79,7 +79,7 @@ class TestCreateCourier:
             assert response_data['message'] == response_text
 
     @allure.title("Ошибка при создании с существующим логином")
-    def test_cant_create_with_already_exist_login(self, generate_random_data, register_new_courier_and_return_login_password):
+    def test_cant_create_with_already_exist_login(self, register_new_courier_and_return_login_password):
         login, password, first_name = register_new_courier_and_return_login_password
         with allure.step("Подготовка данных"):
             helper = Helper()
@@ -90,7 +90,6 @@ class TestCreateCourier:
             "password": password_2,
             "firstName": firstName_2
         }
-
         with allure.step("Отправляем запрос на создание курьера c тем же логином"):
             response = requests.post('https://qa-scooter.praktikum-services.ru/api/v1/courier', data=payload_for_err)
             response_data = response.json()
